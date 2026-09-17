@@ -1,10 +1,6 @@
-# Poetry Journey (詩中行)
-
-Browser-based interactive narrative game exploring classical Chinese poetry through interactive storytelling.
-
-**Tencent “AI CAN DO IT” Global AI Game Development Hackathon — Global Finals 2nd Prize, 2026**
-
-[Play Online](https://poetryjourney.online)
+### [Poetry Journey (詩中行)](https://github.com/charlice-du/poetry-journey)
+Browser-based interactive narrative game developed by a three-person HKU team.  
+**2nd Prize — Tencent “AI CAN DO IT” Global Finals 2026**
 
 ## Overview
 
