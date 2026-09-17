@@ -25,13 +25,13 @@ stylized visual presentation, and AI-assisted experiences.
 
 ### Game Interface
 
-![Poetry Journey game interface](<img width="1914" height="822" alt="Poetry Journey" src="https://github.com/user-attachments/assets/a09c176f-c4c1-4178-be57-442a0ad8ec4c" />)
+<img width="1914" alt="Poetry Journey game interface" src="https://github.com/user-attachments/assets/a09c176f-c4c1-4178-be57-442a0ad8ec4c" />
 
 Browser-based game interface and promotional visual for Poetry Journey.
 
 ### Global Finals
 
-![Tencent AI CAN DO IT Global Finals](<img width="4469" height="2979" alt="Final Prize" src="https://github.com/user-attachments/assets/56117440-2114-4d62-ac21-0bee50258a09" />)
+<img width="900" alt="Tencent AI CAN DO IT Global Finals" src="https://github.com/user-attachments/assets/56117440-2114-4d62-ac21-0bee50258a09" />
 
 Team showcase at the Tencent “AI CAN DO IT” Global Finals in Shenzhen.
 
