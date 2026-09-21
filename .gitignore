@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+
+# Generated demo output
+examples/generated/
+
+# Local project integrations and secrets
+.mcp.json
+.workbuddy/mcp.json
+.codebuddy/settings.local.json
+.env
+.env.*
+!.env.example
+
+# An authorized MCP server may be supplied locally, but is not published here.
+vendor/
