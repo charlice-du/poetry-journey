@@ -2,21 +2,7 @@ name: Validate public demo
 
 on:
   push:
-    paths:
-      - ".codebuddy/**"
-      - "config/**"
-      - "docs/**"
-      - "examples/**"
-      - "scripts/**"
-      - ".github/workflows/validate-examples.yml"
   pull_request:
-    paths:
-      - ".codebuddy/**"
-      - "config/**"
-      - "docs/**"
-      - "examples/**"
-      - "scripts/**"
-      - ".github/workflows/validate-examples.yml"
 
 permissions:
   contents: read
@@ -41,4 +27,7 @@ jobs:
           --duration one_day
           --output examples/generated/ci-route.json
       - name: Revalidate generated public inputs
-        run: python scripts/validate_examples.py --strict
+        run: >-
+          python scripts/validate_examples.py
+          --strict
+          --generated-route examples/generated/ci-route.json
