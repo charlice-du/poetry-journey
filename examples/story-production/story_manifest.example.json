@@ -22,6 +22,7 @@
   },
   "assembly": {
     "status": "assembled_synthetic_no_media",
+    "input_content_sha256": "5758969463e3613d172109871e9443a168d31d434ac34480293a0881a65f50fb",
     "input_page_refs": ["page-01-bridge", "page-02-argument", "page-03-after"],
     "input_card_refs": ["card-argument-as-performance", "card-intellectual-companionship"],
     "media_policy": "plans_only_no_assets",

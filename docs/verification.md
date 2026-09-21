@@ -15,12 +15,13 @@ The validator uses only the Python standard library. It checks:
   workflow YAML subset used here;
 - required top-level fields and stable IDs exist;
 - route stops reference known candidates;
-- cards reference known stops, candidates and evidence sources;
+- stops and cards preserve candidate and evidence-source lineage;
 - the handbook contains every published stop ID;
 - story pages, collection cards and media tasks resolve every source, character,
   page and card reference;
 - story manifest counts match the current synthetic objects;
 - the content-freeze digest matches the current story data;
+- assembly records the same frozen story-input digest;
 - assembly and QA both point to the current synthetic final artifact;
 - intended public files contain no common absolute local paths or
   non-placeholder credential-like values;
@@ -28,6 +29,9 @@ The validator uses only the Python standard library. It checks:
 - generated drafts remain under the ignored examples/generated/ directory.
 
 GitHub Actions runs the same validation and also exercises route generation.
+The generated CI route is passed back to the validator explicitly, so its
+schema, query, candidate lineage, source lineage and review metadata are
+checked rather than merely ignored as generated output.
 
 ## What the validator cannot prove
 

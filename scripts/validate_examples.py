@@ -199,6 +199,7 @@ def validate_route(report: Report) -> tuple[int, int]:
     candidate_ids = collect_ids(
         candidates.get("candidates"), "id", "route candidates", report
     )
+    candidate_source_refs: dict[str, set[str]] = {}
 
     for candidate in candidates.get("candidates", []):
         if not isinstance(candidate, dict):
@@ -219,12 +220,17 @@ def validate_route(report: Report) -> tuple[int, int]:
             )
         relation = candidate.get("relation")
         if isinstance(relation, dict):
+            relation_refs = relation.get("source_refs")
             check_refs(
-                relation.get("source_refs"),
+                relation_refs,
                 source_ids,
                 f"candidate {candidate_id} relation.source_refs",
                 report,
             )
+            if isinstance(candidate_id, str) and isinstance(relation_refs, list):
+                candidate_source_refs[candidate_id] = {
+                    ref for ref in relation_refs if isinstance(ref, str)
+                }
         else:
             report.error(f"candidate {candidate_id}: relation must be an object")
 
@@ -237,21 +243,34 @@ def validate_route(report: Report) -> tuple[int, int]:
     if route.get("ordering_mode") != "cultural_sequence_not_navigation":
         report.error("route.example.json: ordering_mode must preserve navigation caveat")
     stop_ids = collect_ids(route.get("stops"), "stop_id", "route stops", report)
+    stop_lineage: dict[str, tuple[str, set[str]]] = {}
     orders: list[int] = []
     for stop in route.get("stops", []):
         if not isinstance(stop, dict):
             continue
         stop_id = stop.get("stop_id", "<unknown>")
-        if stop.get("candidate_id") not in candidate_ids:
+        candidate_id = stop.get("candidate_id")
+        if candidate_id not in candidate_ids:
             report.error(
-                f"stop {stop_id}: unknown candidate_id '{stop.get('candidate_id')}'"
+                f"stop {stop_id}: unknown candidate_id '{candidate_id}'"
             )
+        stop_refs = stop.get("source_refs")
         check_refs(
-            stop.get("source_refs"),
+            stop_refs,
             source_ids,
             f"stop {stop_id} source_refs",
             report,
         )
+        if isinstance(candidate_id, str) and isinstance(stop_refs, list):
+            normalized_refs = {ref for ref in stop_refs if isinstance(ref, str)}
+            allowed_refs = candidate_source_refs.get(candidate_id)
+            if allowed_refs is not None and not normalized_refs <= allowed_refs:
+                report.error(
+                    f"stop {stop_id}: source_refs are outside candidate "
+                    f"'{candidate_id}' lineage"
+                )
+            if isinstance(stop_id, str):
+                stop_lineage[stop_id] = (candidate_id, normalized_refs)
         if isinstance(stop.get("order"), int):
             orders.append(stop["order"])
         else:
@@ -272,18 +291,36 @@ def validate_route(report: Report) -> tuple[int, int]:
         if not isinstance(card, dict):
             continue
         card_id = card.get("card_id", "<unknown>")
-        if card.get("stop_id") not in stop_ids:
-            report.error(f"card {card_id}: unknown stop_id '{card.get('stop_id')}'")
-        if card.get("candidate_id") not in candidate_ids:
+        stop_id = card.get("stop_id")
+        candidate_id = card.get("candidate_id")
+        if stop_id not in stop_ids:
+            report.error(f"card {card_id}: unknown stop_id '{stop_id}'")
+        if candidate_id not in candidate_ids:
             report.error(
-                f"card {card_id}: unknown candidate_id '{card.get('candidate_id')}'"
+                f"card {card_id}: unknown candidate_id '{candidate_id}'"
             )
+        card_refs = card.get("source_refs")
         check_refs(
-            card.get("source_refs"),
+            card_refs,
             source_ids,
             f"card {card_id} source_refs",
             report,
         )
+        lineage = stop_lineage.get(stop_id) if isinstance(stop_id, str) else None
+        if lineage is not None:
+            stop_candidate_id, stop_source_refs = lineage
+            if candidate_id != stop_candidate_id:
+                report.error(
+                    f"card {card_id}: candidate_id '{candidate_id}' does not "
+                    f"match stop {stop_id} candidate_id '{stop_candidate_id}'"
+                )
+            if isinstance(card_refs, list):
+                normalized_refs = {ref for ref in card_refs if isinstance(ref, str)}
+                if not normalized_refs <= stop_source_refs:
+                    report.error(
+                        f"card {card_id}: source_refs are outside stop "
+                        f"'{stop_id}' lineage"
+                    )
 
     handbook_path = ROUTE_DIR / "handbook.example.md"
     try:
@@ -299,6 +336,124 @@ def validate_route(report: Report) -> tuple[int, int]:
             report.error(f"handbook.example.md: missing card ID '{card_id}'")
 
     return len(stop_ids), len(card_ids)
+
+
+def validate_generated_route(path: Path, report: Report) -> int:
+    resolved = path if path.is_absolute() else ROOT / path
+    resolved = resolved.resolve()
+    try:
+        resolved.relative_to(GENERATED_DIR.resolve())
+    except ValueError:
+        report.error("generated route: path must stay under examples/generated/")
+        return 0
+
+    route = load_json(resolved, report)
+    candidates = load_json(ROUTE_DIR / "candidates.example.json", report)
+    require_keys(
+        route,
+        [
+            "schema_version",
+            "artifact_type",
+            "generator",
+            "query",
+            "status",
+            "ordering_mode",
+            "stops",
+            "warnings",
+        ],
+        relative(resolved),
+        report,
+    )
+    if route.get("artifact_type") != "poetry_route_prototype":
+        report.error("generated route: unexpected artifact_type")
+    if route.get("status") != "offline_draft":
+        report.error("generated route: status must be offline_draft")
+    if route.get("ordering_mode") != "priority_sequence_not_navigation":
+        report.error("generated route: ordering_mode must preserve navigation caveat")
+
+    source_ids = collect_ids(
+        candidates.get("sources"), "id", "generated-route sources", report
+    )
+    candidate_records = {
+        item.get("id"): item
+        for item in candidates.get("candidates", [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    query = route.get("query")
+    if not isinstance(query, dict):
+        report.error("generated route: query must be an object")
+        query = {}
+    for key in ("city", "poet", "duration"):
+        if not isinstance(query.get(key), str) or not query[key].strip():
+            report.error(f"generated route: query.{key} must be a non-empty string")
+
+    stop_ids = collect_ids(
+        route.get("stops"), "stop_id", "generated-route stops", report
+    )
+    orders: list[int] = []
+    for stop in route.get("stops", []):
+        if not isinstance(stop, dict):
+            continue
+        stop_id = stop.get("stop_id", "<unknown>")
+        candidate_id = stop.get("candidate_id")
+        candidate = candidate_records.get(candidate_id)
+        if candidate is None:
+            report.error(
+                f"generated stop {stop_id}: unknown candidate_id '{candidate_id}'"
+            )
+            continue
+        relation = candidate.get("relation")
+        if not isinstance(relation, dict):
+            report.error(f"generated stop {stop_id}: candidate relation is invalid")
+            continue
+        stop_refs = stop.get("source_refs")
+        check_refs(
+            stop_refs,
+            source_ids,
+            f"generated stop {stop_id} source_refs",
+            report,
+        )
+        raw_candidate_refs = relation.get("source_refs")
+        candidate_refs = (
+            {ref for ref in raw_candidate_refs if isinstance(ref, str)}
+            if isinstance(raw_candidate_refs, list)
+            else set()
+        )
+        normalized_refs = {
+            ref for ref in stop_refs if isinstance(ref, str)
+        } if isinstance(stop_refs, list) else set()
+        if normalized_refs != candidate_refs:
+            report.error(
+                f"generated stop {stop_id}: source lineage does not match candidate"
+            )
+        if stop.get("display_name") != candidate.get("display_name"):
+            report.error(
+                f"generated stop {stop_id}: display_name does not match candidate"
+            )
+        if stop.get("evidence_status") != relation.get("status"):
+            report.error(
+                f"generated stop {stop_id}: evidence_status does not match candidate"
+            )
+        if stop.get("review") != candidate.get("review"):
+            report.error(f"generated stop {stop_id}: review metadata is stale")
+        location = candidate.get("modern_location")
+        if not isinstance(location, dict) or location.get("city") != query.get("city"):
+            report.error(f"generated stop {stop_id}: candidate city does not match query")
+        if query.get("poet") not in candidate.get("poets", []):
+            report.error(f"generated stop {stop_id}: candidate poet does not match query")
+        if isinstance(stop.get("order"), int):
+            orders.append(stop["order"])
+        else:
+            report.error(f"generated stop {stop_id}: order must be an integer")
+
+    if orders and sorted(orders) != list(range(1, len(orders) + 1)):
+        report.error(
+            "generated-route stops: order values must be contiguous starting at 1"
+        )
+    warnings = route.get("warnings")
+    if not isinstance(warnings, list) or not warnings:
+        report.error("generated route: warnings must remain visible")
+    return len(stop_ids)
 
 
 def validate_story(report: Report) -> tuple[int, int, int]:
@@ -476,6 +631,7 @@ def validate_story(report: Report) -> tuple[int, int, int]:
                     f"{expected_counts.get(name)!r}, actual={actual}"
                 )
 
+    story_digest: str | None = None
     freeze = manifest.get("content_freeze")
     if not isinstance(freeze, dict):
         report.error("story manifest: content_freeze must be an object")
@@ -501,8 +657,33 @@ def validate_story(report: Report) -> tuple[int, int, int]:
     if not isinstance(assembly, dict):
         report.error("story manifest: assembly must be an object")
     else:
+        require_keys(
+            assembly,
+            [
+                "status",
+                "input_content_sha256",
+                "input_page_refs",
+                "input_card_refs",
+                "media_policy",
+                "final_artifact",
+            ],
+            "story manifest assembly",
+            report,
+        )
         if assembly.get("status") != "assembled_synthetic_no_media":
             report.error("story manifest: unexpected assembly status")
+        assembly_input_digest = assembly.get("input_content_sha256")
+        if story_digest is not None and assembly_input_digest != story_digest:
+            report.error(
+                "story assembly: input_content_sha256 does not match frozen story data"
+            )
+        if (
+            isinstance(freeze, dict)
+            and assembly_input_digest != freeze.get("sha256")
+        ):
+            report.error(
+                "story assembly: input_content_sha256 does not match content freeze"
+            )
         check_refs(
             assembly.get("input_page_refs"),
             page_ids,
@@ -781,6 +962,7 @@ def validate_workflow_yaml(report: Report) -> int:
             "steps:",
             "scripts/validate_examples.py --strict",
             "scripts/create_route_prototype.py",
+            "--generated-route examples/generated/ci-route.json",
         ):
             if required_fragment not in text:
                 report.error(
@@ -797,6 +979,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="treat validator warnings as errors",
     )
+    parser.add_argument(
+        "--generated-route",
+        type=Path,
+        help="also validate one generated route under examples/generated/",
+    )
     return parser.parse_args()
 
 
@@ -807,6 +994,16 @@ def main() -> int:
     json_count = validate_all_json(files, report)
     workflow_count = validate_workflow_yaml(report)
     route_stop_count, route_card_count = validate_route(report)
+    generated_stop_count = (
+        validate_generated_route(args.generated_route, report)
+        if args.generated_route is not None
+        else 0
+    )
+    generated_summary = (
+        f"{generated_stop_count} generated route stops; "
+        if args.generated_route is not None
+        else ""
+    )
     story_page_count, story_card_count, media_task_count = validate_story(report)
     scan_public_inputs(files, report)
     validate_generated_policy(files, report)
@@ -828,6 +1025,7 @@ def main() -> int:
         f"{len(files)} intended public files, {json_count} JSON files and "
         f"{workflow_count} workflow YAML file(s); "
         f"{route_stop_count} route stops and {route_card_count} route cards; "
+        f"{generated_summary}"
         f"{story_page_count} story pages, {story_card_count} collection cards "
         f"and {media_task_count} media tasks; "
         "freeze, QA, publication-hazard and generated-draft checks passed; "
