@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "cnkgraph": {
+      "command": "node",
+      "args": [
+        "./vendor/cnkgraph-mcp/server.mjs"
+      ],
+      "env": {
+        "CNKGRAPH_BASE": "https://open.cnkgraph.com/api",
+        "CNKGRAPH_TIMEOUT_MS": "60000"
+      }
+    }
+  }
+}

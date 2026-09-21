@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.1",
+  "artifact_type": "story_production",
+  "story_id": "story-zhuangzi-huizi-demo",
+  "title": "濠梁问答：文本、解释与改编",
+  "demo_notice": "Newly written teaching example. It is not copied from the team's competition output.",
+  "sources": [
+    {
+      "id": "source-zhuangzi-autumn-waters",
+      "source_type": "transmitted_primary_text",
+      "title": "《庄子·秋水》",
+      "locator": "庄子与惠子游于濠梁之上章",
+      "url": null,
+      "evidence_grade": "A_textual",
+      "supports": "The received text contains the fish-happiness dialogue and its argumentative turn.",
+      "boundary": "A transmitted philosophical text supports the passage's content, not independent proof that the exchange occurred verbatim."
+    },
+    {
+      "id": "source-zhuangzi-xuwugui",
+      "source_type": "transmitted_primary_text",
+      "title": "《庄子·徐无鬼》",
+      "locator": "庄子送葬过惠子之墓章",
+      "url": null,
+      "evidence_grade": "A_textual",
+      "supports": "The received text contains the craftsman analogy told near Huizi's grave.",
+      "boundary": "The passage supports a literary-philosophical interpretation of intellectual companionship, not every modern biographical detail."
+    }
+  ],
+  "characters": [
+    {
+      "id": "character-narrator",
+      "name": "旁白",
+      "role": "context_and_boundaries"
+    },
+    {
+      "id": "character-zhuangzi",
+      "name": "庄子",
+      "role": "speaker_in_transmitted_dialogue"
+    },
+    {
+      "id": "character-huizi",
+      "name": "惠子",
+      "role": "speaker_in_transmitted_dialogue"
+    }
+  ],
+  "pages": [
+    {
+      "page_id": "page-01-bridge",
+      "sequence": 1,
+      "heading": "濠梁之上",
+      "narration": "The received Zhuangzi places the two thinkers above the Hao River and turns a view of swimming fish into a question about how one knows another's experience.",
+      "character_refs": ["character-narrator", "character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-autumn-waters"],
+      "creative_status": "source_based_paraphrase",
+      "review_notes": ["Do not present paraphrase as a verbatim translation."]
+    },
+    {
+      "page_id": "page-02-argument",
+      "sequence": 2,
+      "heading": "问题怎样转向",
+      "narration": "For this teaching adaptation, the exchange is staged as a fast argumentative reversal: a claim about fish becomes a challenge about the basis of knowledge.",
+      "character_refs": ["character-narrator", "character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-autumn-waters"],
+      "creative_status": "creative_adaptation",
+      "review_notes": ["Keep the distinction between the received text and the modern staging visible."]
+    },
+    {
+      "page_id": "page-03-after",
+      "sequence": 3,
+      "heading": "失去对手之后",
+      "narration": "A separate passage has Zhuangzi recall a masterful craftsman by Huizi's grave. The adaptation reads this as grief for the rare person who could meet his thought in motion.",
+      "character_refs": ["character-narrator", "character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-xuwugui"],
+      "creative_status": "editorial_interpretation",
+      "review_notes": ["Describe this as an interpretation, not a settled psychological diagnosis."]
+    }
+  ],
+  "collection_cards": [
+    {
+      "card_id": "card-argument-as-performance",
+      "title": "当辩论成为表演",
+      "body": "The adaptation uses pacing and reversal to make the structure of the argument visible, while keeping the invented staging separate from the received text.",
+      "page_refs": ["page-01-bridge", "page-02-argument"],
+      "source_refs": ["source-zhuangzi-autumn-waters"],
+      "creative_status": "creative_adaptation",
+      "review_notes": ["Do not present the performance choices as historical fact."]
+    },
+    {
+      "card_id": "card-intellectual-companionship",
+      "title": "能接住话的人",
+      "body": "Reading the craftsman analogy beside the Hao River dialogue suggests a modern theme of intellectual companionship; this remains an interpretation rather than a biographical certainty.",
+      "page_refs": ["page-03-after"],
+      "source_refs": ["source-zhuangzi-xuwugui"],
+      "creative_status": "editorial_interpretation",
+      "review_notes": ["Keep the inference visible and avoid psychological certainty."]
+    }
+  ],
+  "media_plan": [
+    {
+      "task_id": "media-image-bridge",
+      "media_type": "image",
+      "status": "not_generated",
+      "page_refs": ["page-01-bridge"],
+      "card_refs": ["card-argument-as-performance"],
+      "character_refs": ["character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-autumn-waters"],
+      "brief": "A historically cautious, non-photoreal scene of two thinkers beside water; costume and architecture need specialist review."
+    },
+    {
+      "task_id": "media-image-memory",
+      "media_type": "image",
+      "status": "not_generated",
+      "page_refs": ["page-03-after"],
+      "card_refs": ["card-intellectual-companionship"],
+      "character_refs": ["character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-xuwugui"],
+      "brief": "A restrained memory scene with no claim to reconstruct a verified historical event; period details require review."
+    },
+    {
+      "task_id": "media-voice-dialogue",
+      "media_type": "audio",
+      "status": "not_generated",
+      "page_refs": ["page-01-bridge", "page-02-argument"],
+      "card_refs": ["card-argument-as-performance"],
+      "character_refs": ["character-zhuangzi", "character-huizi"],
+      "source_refs": ["source-zhuangzi-autumn-waters"],
+      "brief": "Contrasting but non-caricatured voices; obtain performer or synthesis rights and label generated audio."
+    },
+    {
+      "task_id": "media-voice-memory",
+      "media_type": "audio",
+      "status": "not_generated",
+      "page_refs": ["page-03-after"],
+      "card_refs": ["card-intellectual-companionship"],
+      "character_refs": ["character-narrator", "character-zhuangzi"],
+      "source_refs": ["source-zhuangzi-xuwugui"],
+      "brief": "Narration only; no cloned or generated voice is bundled with the public demo."
+    }
+  ],
+  "review_gates": [
+    {
+      "gate_id": "gate-source",
+      "area": "source_and_historical_framing",
+      "status": "human_review_required"
+    },
+    {
+      "gate_id": "gate-adaptation",
+      "area": "adaptation_transparency",
+      "status": "human_review_required"
+    },
+    {
+      "gate_id": "gate-media",
+      "area": "media_rights_and_period_visuals",
+      "status": "human_review_required"
+    },
+    {
+      "gate_id": "gate-release",
+      "area": "content_freeze_and_publication",
+      "status": "human_review_required"
+    }
+  ]
+}

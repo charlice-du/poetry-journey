@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "poetry_route_cards",
+  "route_id": "route-xuancheng-li-bai-demo",
+  "cards": [
+    {
+      "card_id": "card-jingting-encounter",
+      "stop_id": "stop-01-jingting",
+      "candidate_id": "place-jingting-mountain",
+      "title": "相看：把山写成对话者",
+      "body": "The poem's enduring device is reciprocal looking: the mountain is presented not merely as scenery, but as a partner in a quiet encounter.",
+      "content_type": "editorial_interpretation",
+      "source_refs": ["source-li-bai-jingting"],
+      "historical_boundary": "This reading interprets the transmitted poem; it does not independently prove a biographical scene."
+    },
+    {
+      "card_id": "card-xietiao-poetic-memory",
+      "stop_id": "stop-02-xietiao",
+      "candidate_id": "place-xietiao-tower",
+      "title": "登楼：一座城中的诗歌记忆",
+      "body": "The poem's title links the act of climbing, Xuancheng and the memory of Xie Tiao. The modern site should be introduced with its reconstruction history, not as an unchanged Tang structure.",
+      "content_type": "editorial_interpretation_with_site_caveat",
+      "source_refs": ["source-li-bai-xietiao"],
+      "historical_boundary": "The poem supports the named setting; identification of present structures needs modern historical sources."
+    },
+    {
+      "card_id": "card-peach-pool-friendship",
+      "stop_id": "stop-03-peach-pool",
+      "candidate_id": "place-peach-blossom-pool",
+      "title": "深千尺：用山水衡量情谊",
+      "body": "Peach Blossom Pool becomes a poetic scale for friendship. A learning activity can compare the literal landscape image with the emotional comparison.",
+      "content_type": "editorial_interpretation",
+      "source_refs": ["source-li-bai-wanglun"],
+      "historical_boundary": "The primary text supports the image; modern memorial details require separate evidence."
+    }
+  ],
+  "review": {
+    "status": "human_review_required",
+    "notes": ["Check translations and age suitability before classroom publication."]
+  }
+}

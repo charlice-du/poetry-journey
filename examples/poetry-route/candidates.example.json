@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "poetry_route_candidates",
+  "demo_notice": "Sanitized teaching data. Cultural associations are not live navigation or venue advice.",
+  "query": {
+    "city": "宣城",
+    "poet": "李白",
+    "duration": "one_day"
+  },
+  "sources": [
+    {
+      "id": "source-li-bai-jingting",
+      "source_type": "primary_text",
+      "title": "《独坐敬亭山》",
+      "author": "李白",
+      "locator": "诗题及全诗",
+      "url": null,
+      "supports": "The transmitted poem directly names Jingting Mountain and describes the poetic encounter with it."
+    },
+    {
+      "id": "source-li-bai-xietiao",
+      "source_type": "primary_text",
+      "title": "《秋登宣城谢朓北楼》",
+      "author": "李白",
+      "locator": "诗题及全诗",
+      "url": null,
+      "supports": "The transmitted poem names Xuancheng and Xie Tiao's North Tower in its title."
+    },
+    {
+      "id": "source-li-bai-wanglun",
+      "source_type": "primary_text",
+      "title": "《赠汪伦》",
+      "author": "李白",
+      "locator": "诗题及全诗",
+      "url": null,
+      "supports": "The transmitted poem names Peach Blossom Pool as the comparison used for friendship."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "place-jingting-mountain",
+      "display_name": "敬亭山",
+      "modern_location": {
+        "city": "宣城",
+        "administrative_area": "安徽",
+        "coordinates": null,
+        "verification_status": "requires_live_map_check"
+      },
+      "poets": ["李白"],
+      "relation": {
+        "type": "primary_text_place_reference",
+        "subject": "李白",
+        "object": "敬亭山",
+        "evidence_level": "primary_text",
+        "status": "supported_as_textual_association",
+        "summary": "The poem 《独坐敬亭山》 directly establishes a literary association between Li Bai and Jingting Mountain.",
+        "source_refs": ["source-li-bai-jingting"]
+      },
+      "priority": 100,
+      "suggested_minutes": 150,
+      "review": {
+        "status": "human_review_required",
+        "notes": [
+          "A primary text supports the literary association, not every later biographical claim.",
+          "Confirm current entrance, access, weather and route details before travel."
+        ]
+      }
+    },
+    {
+      "id": "place-xietiao-tower",
+      "display_name": "谢朓楼（现代景区名称）",
+      "modern_location": {
+        "city": "宣城",
+        "administrative_area": "安徽",
+        "coordinates": null,
+        "verification_status": "requires_live_map_check"
+      },
+      "poets": ["李白", "谢朓"],
+      "relation": {
+        "type": "poem_title_and_modern_site_association",
+        "subject": "李白",
+        "object": "宣城谢朓北楼",
+        "evidence_level": "primary_text_plus_modern_identification",
+        "status": "requires_historical_site_review",
+        "summary": "Li Bai's poem directly names Xie Tiao's North Tower; the relationship between the transmitted setting and today's visitor site needs separate historical documentation.",
+        "source_refs": ["source-li-bai-xietiao"]
+      },
+      "priority": 90,
+      "suggested_minutes": 90,
+      "review": {
+        "status": "human_review_required",
+        "notes": [
+          "Do not imply that all visible structures date to Li Bai's lifetime.",
+          "Confirm the modern site's official name and visitor information."
+        ]
+      }
+    },
+    {
+      "id": "place-peach-blossom-pool",
+      "display_name": "桃花潭",
+      "modern_location": {
+        "city": "宣城",
+        "administrative_area": "安徽",
+        "coordinates": null,
+        "verification_status": "requires_live_map_check"
+      },
+      "poets": ["李白"],
+      "relation": {
+        "type": "primary_text_place_reference",
+        "subject": "李白",
+        "object": "桃花潭",
+        "evidence_level": "primary_text",
+        "status": "supported_as_textual_association",
+        "summary": "The transmitted poem 《赠汪伦》 directly uses Peach Blossom Pool in its expression of friendship.",
+        "source_refs": ["source-li-bai-wanglun"]
+      },
+      "priority": 80,
+      "suggested_minutes": 120,
+      "review": {
+        "status": "human_review_required",
+        "notes": [
+          "Textual association does not by itself authenticate every modern memorial feature.",
+          "Distance and travel time from central Xuancheng require a live map check."
+        ]
+      }
+    }
+  ]
+}

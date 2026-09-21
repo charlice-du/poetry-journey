@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "story_production_manifest",
+  "story_id": "story-zhuangzi-huizi-demo",
+  "demo_notice": "Newly authored synthetic manifest. It does not reproduce a competition production file.",
+  "content_file": "story_data.example.json",
+  "expected_counts": {
+    "sources": 2,
+    "characters": 3,
+    "pages": 3,
+    "collection_cards": 2,
+    "media_tasks": 4,
+    "image_tasks": 2,
+    "audio_tasks": 2,
+    "review_gates": 4
+  },
+  "content_freeze": {
+    "status": "frozen_for_public_demo",
+    "frozen_file": "story_data.example.json",
+    "sha256": "5758969463e3613d172109871e9443a168d31d434ac34480293a0881a65f50fb",
+    "allowed_after_freeze": ["qa_metadata_refresh"]
+  },
+  "assembly": {
+    "status": "assembled_synthetic_no_media",
+    "input_page_refs": ["page-01-bridge", "page-02-argument", "page-03-after"],
+    "input_card_refs": ["card-argument-as-performance", "card-intellectual-companionship"],
+    "media_policy": "plans_only_no_assets",
+    "final_artifact": {
+      "path": "final.example.html",
+      "sha256": "45f6c00c27318ec5498c6d3b662506a836a1212d5ac985fffce7160ae1d56f13"
+    }
+  },
+  "qa": {
+    "status": "passed",
+    "checked_artifact": "final.example.html",
+    "checked_sha256": "45f6c00c27318ec5498c6d3b662506a836a1212d5ac985fffce7160ae1d56f13",
+    "checks": {
+      "all_page_refs_present": true,
+      "all_card_refs_present": true,
+      "no_external_media": true,
+      "adaptation_labels_visible": true
+    },
+    "remaining_human_gates": ["gate-source", "gate-adaptation", "gate-media", "gate-release"]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "poetry_route",
+  "route_id": "route-xuancheng-li-bai-demo",
+  "candidate_file": "candidates.example.json",
+  "query": {
+    "city": "宣城",
+    "poet": "李白",
+    "duration": "one_day"
+  },
+  "status": "editorial_draft",
+  "ordering_mode": "cultural_sequence_not_navigation",
+  "stops": [
+    {
+      "stop_id": "stop-01-jingting",
+      "candidate_id": "place-jingting-mountain",
+      "order": 1,
+      "editorial_reason": "Begin with the most direct landscape-poem association in the small demo dataset.",
+      "source_refs": ["source-li-bai-jingting"]
+    },
+    {
+      "stop_id": "stop-02-xietiao",
+      "candidate_id": "place-xietiao-tower",
+      "order": 2,
+      "editorial_reason": "Continue from landscape encounter to Li Bai's dialogue with an earlier poetic tradition in Xuancheng.",
+      "source_refs": ["source-li-bai-xietiao"]
+    },
+    {
+      "stop_id": "stop-03-peach-pool",
+      "candidate_id": "place-peach-blossom-pool",
+      "order": 3,
+      "editorial_reason": "Close with a widely remembered poetic image of friendship while preserving the need for live travel planning.",
+      "source_refs": ["source-li-bai-wanglun"]
+    }
+  ],
+  "warnings": [
+    "This order is for cultural storytelling and is not optimized by distance.",
+    "No coordinates, opening hours, prices or travel times are asserted.",
+    "Check current official venue and map sources before using it for a trip."
+  ],
+  "review": {
+    "status": "human_review_required",
+    "roles": ["subject_matter_reviewer", "travel_information_reviewer"]
+  }
+}
