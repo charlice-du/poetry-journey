@@ -1,8 +1,9 @@
 # WorkBuddy / CodeBuddy guide
 
-This repository is useful with Python alone. WorkBuddy or CodeBuddy adds an
-explanation and orchestration layer, but a real account, MCP server, TTS
-service or image service is never required for the public demo.
+You can run the public demo with Python alone. WorkBuddy or CodeBuddy is
+optional and mainly helps explain the workflows and work with the example
+files. External MCP, TTS and image services are only needed if you choose to
+experiment with those integrations.
 
 ## Level 1 — Inspect
 

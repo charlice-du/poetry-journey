@@ -1,20 +1,17 @@
 # Competition workbench map
 
-> This is a newly written architectural explanation based on a read-only audit
-> of team packages. It is not copied production documentation, does not publish
-> teammate source code, and does not claim that the private system is
-> reproducible from this repository.
+This document summarizes the two workbench architectures used during the
+project. The diagrams were reconstructed from the team packages for
+documentation; the original internal implementation is not published here.
 
-The audited material shows two complementary workbench families. They share
-provenance, status tracking and human-review principles, but they solve
-different problems and should remain distinct public-demo pipelines.
+The project used two separate workbenches. They share ideas such as source
+tracking, status management and review steps, but serve different purposes.
 
 ## A. Production Workbench
 
-The Production Workbench coordinates a story from research through a
-self-contained playable artifact. Narrative generation is only one branch of
-the system: collection cards, revision, media production, manifests and final
-QA are equally important.
+The Production Workbench manages the path from source research to a playable
+story. Besides writing the narrative, it tracks collection cards, revisions,
+image and voice production, assembly and QA.
 
 ~~~mermaid
 flowchart TD
@@ -37,32 +34,33 @@ flowchart TD
     QA -->|issues| RV
 ~~~
 
-Important boundaries:
+### How the stages fit together
 
-- **Narrative research** records what a source supports and what remains
-  interpretation.
-- **Fast remix** is a lighter editorial path, not a substitute for evidence
-  review.
-- **Revision** preserves references while changing structure or presentation.
-- **Content freeze** prevents image, audio and assembly branches from silently
-  using different text versions.
-- **Image and dubbing branches** can run in parallel after the freeze, but both
-  still require rights and quality review.
-- **Manifests and status** make counts, references, gates and current artifacts
-  inspectable.
-- **QA** must describe the exact final artifact, not an older build with a
+- **Narrative research** records what the sources support and where
+  interpretation begins.
+- **Fast remix** provides a lighter editorial path but still goes through
+  evidence review.
+- **Revision** can change structure or presentation while preserving source
+  references.
+- **Content freeze** gives the image, audio and assembly branches a shared text
+  version.
+- **Image and dubbing branches** can run in parallel after the freeze, with
+  separate rights and quality review.
+- **Manifests and status** record artifact references, counts and the current
+  state of each stage.
+- **QA** refers to the exact final artifact rather than another build with a
   similar filename.
 
-The public story example represents these controls with
-`story_data.example.json`, `story_manifest.example.json` and a tiny
-`final.example.html`. It intentionally contains no generated media.
+The public story example represents these stages with
+`story_data.example.json`, `story_manifest.example.json` and a small
+`final.example.html`. It contains no generated media.
 
 ## B. Poetry Geo Workbench
 
 The Poetry Geo Workbench converts a poet, city or poem query into a
-research-backed cultural route and handbook. A production run uses structured
-research before route writing; a place is not accepted merely because a poem
-and a modern attraction share a name.
+research-backed cultural route and handbook. Research comes before route
+writing: a place is not accepted simply because a poem and a modern attraction
+share a name.
 
 ~~~mermaid
 flowchart TD
@@ -84,10 +82,10 @@ flowchart TD
     HP --> HR
 ~~~
 
-The CNKGraph MCP was a substantive research adapter in the audited production
-architecture. It is optional only for this repository's offline demo, which
-uses fixed synthetic fixtures. A fresh production-style research run would
-need an authorized data source plus separate current map and venue checks.
+In the original workflow, CNKGraph MCP supplied structured information about
+poems, poets, places and related cultural entities. The public demo works
+without it by using fixed example data. A fresh research run would still need
+an authorized data source and current map and venue checks.
 
 The public route contracts preserve the main hand-off:
 
@@ -98,10 +96,10 @@ candidates.example.json
   -> handbook.example.md
 ~~~
 
-The result remains a cultural sequence until live coordinates, travel times,
-opening information and accessibility details have been independently checked.
+The result remains a cultural sequence until coordinates, travel times,
+opening information and accessibility details have been checked.
 
-## Shared control plane
+## Shared workflow
 
 ~~~mermaid
 flowchart LR
@@ -112,33 +110,29 @@ flowchart LR
     AD[Optional authorized adapters] -. external data or media .-> CT
 ~~~
 
-WorkBuddy or CodeBuddy can orchestrate these contracts and explain unresolved
-gates. It does not turn model output into verified history, grant media rights,
-or make an external service safe by itself.
+WorkBuddy or CodeBuddy can help move between these stages, inspect the
+artifacts and flag items that still need review. Historical claims, media
+rights and live external data still need to be checked separately.
 
-## Production artifact to public-demo representation
+## Production artifact to public-example mapping
 
-| Audited production concept | Public-demo representation | Why it is intentionally different |
+| Production concept | Public example | Public-demo approach |
 | --- | --- | --- |
-| Production narrative and collection-card files | `story_data.example.json` with three synthetic pages and two synthetic cards | Demonstrates references and labels without copying teammate prose |
-| `production_manifest.json` and story manifests | `story_manifest.example.json` | Keeps counts, freeze, assembly and QA contracts while using a newly authored schema |
-| Production final interactive book | Small `final.example.html` | Provides a hashable QA target without production UI, images, audio or interaction code |
-| Real image and audio assets | Media-plan records with `not_generated` status | Avoids ownership, service-term, voice and file-size risks |
-| Real image, TTS and voice-cloning services | Documented optional adapter boundary | No service implementation or credential is required by the public demo |
-| Production status dashboard | JSON state plus validator output | Makes state inspectable without publishing private orchestration code |
-| CNKGraph queries and responses | Small offline source and candidate fixtures | Avoids redistributing benchmark/API responses or implying live completeness |
-| CNKGraph MCP implementation | Disabled-by-default config template | Shows the connection boundary without publishing ownership-unclear server code |
-| Completed multi-stop route run | Three-stop synthetic cultural sequence | Demonstrates lineage while avoiding copied production output and live travel advice |
-| Handbook JSON/HTML/PDF pipeline | Route cards plus a Markdown handbook | Keeps the public core dependency-free and reviewable |
-| Production coordinate and photo workflows | Null coordinates and explicit review fields | Prevents stale or unverified map and rights claims |
-| Private prompts and Skill implementations | Public CodeBuddy context and a newly authored demo Skill | Teaches safe use without redistributing team prompt libraries |
+| Production narrative and collection-card files | `story_data.example.json` with three synthetic pages and two synthetic cards | Shows references and labels without copying team prose |
+| Production and story manifests | `story_manifest.example.json` | Preserves counts, freeze, assembly and QA in a small example |
+| Production final interactive book | Small `final.example.html` | Provides a QA target without production UI, images, audio or interaction code |
+| Real image and audio assets | Media-plan records with `not_generated` status | Keeps workflow states visible without redistributing assets |
+| Real image, TTS and voice-cloning services | Documented optional adapter boundary | The offline demo needs no service implementation or credential |
+| Production status dashboard | JSON state plus validator output | Makes state inspectable without publishing orchestration code |
+| CNKGraph queries and responses | Small offline source and candidate fixtures | Uses no benchmark or API response corpus |
+| CNKGraph MCP implementation | Disabled-by-default config template | Shows the connection point without publishing the server |
+| Completed multi-stop route run | Three-stop synthetic cultural sequence | Demonstrates lineage without making live travel claims |
+| Handbook JSON/HTML/PDF pipeline | Route cards plus a Markdown handbook | Keeps the public example dependency-free and easy to inspect |
+| Production coordinate and photo workflows | Null coordinates and explicit review fields | Leaves unverified map and rights details open for review |
+| Private prompts and Skill implementations | Public CodeBuddy context and a demo Skill | Provides safe project guidance without redistributing team prompts |
 
-## What this repository proves
+## Scope of the public demo
 
-The repository can prove that its public examples parse, cross-references
-resolve, freeze and QA hashes match, an offline route draft can be generated,
-and common publication hazards are absent.
-
-It cannot prove that the original private services remain available, that all
-historical interpretations are definitive, that live travel details are
-current, or that the audited packages may be redistributed.
+The public demo checks that its example data is internally consistent, that
+references resolve and that the offline generator works. It does not reproduce
+the original private services or replace historical and live-data review.
